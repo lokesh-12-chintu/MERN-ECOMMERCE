@@ -1,0 +1,40 @@
+.header {
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwe0Q5j75c9LONoxZfh9h6v3zqNS4b6c8KwOr-dAUbUKdFAlWcF_0CtNBvxqVceqRM_ik&usqp=CAU');
+    background-size: cover;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    padding-left: 50px;
+    padding-right: 20px;
+  }
+  
+  .sub-header {
+    display: flex;
+  }
+  .para {
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+    font-family: 'gabriola';
+    font-size: 28px;
+  }
+  
+  .image {
+    height: 55px;
+    width: 300px;
+  }
+  .heading {
+    text-decoration: none;
+    color: black;
+  }
+  .logout-button{
+    border:none;
+    background-color:transparent;
+    
+  }
+  .main-header{
+    z-index:1;
+    position:relative;
+  }

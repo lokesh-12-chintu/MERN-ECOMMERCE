@@ -1,0 +1,19 @@
+.form-container{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.submit-input{
+    background-color:rgb(53, 95, 186);
+    color:#ffffff;
+    border:none;
+    padding:5px;
+    width:80px;
+}
+.signin-para {
+    color: black;
+    text-decoration: none;
+    font-family: 'gabriola';
+    font-size: 25px;
+  }
