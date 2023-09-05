@@ -1,61 +1,84 @@
 const User = require("../../models/index");
-const jwt = require('jsonwebtoken')
-const shortid = require("shortid")
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const shortid = require("shortid");
 
-exports.signup = async(req,res) => {
-    try{
-    const {firstName,lastName,email,password} = req.body;
-    let exist = await User.findOne({email})
-    if (exist){
-        return res.status(400).send("User Already Exist")
-    }
-    
-    const _user = new User({
+exports.signup = (req, res) => {
+  User.findOne({ email: req.body.email }).exec((error, user) => {
+    if (user)
+      return res.status(400).json({
+        message: "Admin already registered",
+      });
+
+    User.estimatedDocumentCount(async (err, count) => {
+      if (err) return res.status(400).json({ error });
+      let role = "admin";
+      if (count === 0) {
+        role = "super-admin";
+      }
+
+      const { firstName, lastName, email, password } = req.body;
+      const hash_password = await bcrypt.hash(password, 10);
+      const _user = new User({
         firstName,
         lastName,
         email,
-        password,
-        username:shortid.generate(),
-        role:"admin"
+        hash_password,
+        username: shortid.generate(),
+        role,
+      });
+
+      _user.save((error, data) => {
+        if (error) {
+          return res.status(400).json({
+            message: "Something went wrong",
+          });
+        }
+
+        if (data) {
+          return res.status(201).json({
+            message: "Admin created Successfully..!",
+          });
+        }
+      });
     });
+  });
+};
 
-    await _user.save();
-    res.status(201).send('Admin created Successfully')
-    }catch(err){
-        return res.status(400).send('Internal Server Error')
+exports.signin = (req, res) => {
+  User.findOne({ email: req.body.email }).exec(async (error, user) => {
+    if (error) return res.status(400).json({ error });
+    if (user) {
+      const isPassword = await user.authenticate(req.body.password);
+      if (
+        isPassword &&
+        (user.role === "admin" || user.role === "super-admin")
+      ) {
+        const token = jwt.sign(
+          { _id: user._id, role: user.role },
+          process.env.JWT_SECRET,
+          { expiresIn: "1d" }
+        );
+        const { _id, firstName, lastName, email, role, fullName } = user;
+        res.cookie("token", token, { expiresIn: "1d" });
+        res.status(200).json({
+          token,
+          user: { _id, firstName, lastName, email, role, fullName },
+        });
+      } else {
+        return res.status(400).json({
+          message: "Invalid Password",
+        });
+      }
+    } else {
+      return res.status(400).json({ message: "Something went wrong" });
     }
-}
+  });
+};
 
-exports.signin = async(req,res) => {
-    try{
-        const {email,password} = req.body;
-        User.findOne({email})
-        .then((user,error) => {
-            if(error) return res.status(400).json({error})
-            if(user){
-               if(user.role === "admin"){
-                    const token = jwt.sign({_id:user._id,role:user.role},process.env.JWT_SECRET,{expiresIn:"7d"})
-                    const {_id,firstName,lastName,email,role,fullName} = user;
-                    res.cookie('token',token,{expiresIn:'7d'})
-                    res.status(200).json({
-                        token,
-                        user:{
-                            _id,firstName,lastName,email,role,fullName
-                        }
-                    })
-               }
-            }  
-        })
-        
-    }catch(err){
-        return res.status(400).send("Invalid Password")
-    }
-}
-
-
-exports.signout = (req,res) => {
-    res.clearCookie('token');
-    res.status(200).json({
-        message:'Signout Successfully...'
-    })
-}
+exports.signout = (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({
+    message: "Signout successfully...!",
+  });
+};

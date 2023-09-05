@@ -1,5 +1,5 @@
 import "./index.css"
-import {Navigate} from "react-router-dom"
+import {Redirect} from "react-router-dom"
 import {useSelector,useDispatch} from "react-redux"
 import {useState} from "react"
 import {signup} from "../../actions"
@@ -23,7 +23,7 @@ const Signup = () => {
     }
 
     if(auth.authenticate){
-        return <Navigate to = {'/'}/>
+        return <Redirect to = {'/'}/>
     } 
 
     if(user.loading){
@@ -37,13 +37,13 @@ const Signup = () => {
                     <p className = "signin-para">SIGN UP</p>
                     <div>
                         <label htmlFor = "input-1">First Name</label><br/>
-                        <input className = "input"  id = "input-1" placeholder = "First Name" value = {firstName} onChange = {(e) => setFirstName(e.target.value)}/><br/><br/>
+                        <input className = "form-control"  id = "input-1" placeholder = "First Name" value = {firstName} onChange = {(e) => setFirstName(e.target.value)}/><br/>
                         <label htmlFor = "input-2">Last Name</label><br/>
-                        <input className = "input" id = "input-2" placeholder = "Last Name" value = {lastName} onChange = {(e) => setLastName(e.target.value)}/><br/><br/>
+                        <input className = "form-control" id = "input-2" placeholder = "Last Name" value = {lastName} onChange = {(e) => setLastName(e.target.value)}/><br/>
                         <label htmlFor = "input-3">Email address</label><br/>
-                        <input className = "input" type = "email" id = "input-3" placeholder = "Enter Email" value = {email} onChange = {(e) => setEmail(e.target.value)}/><br/><br/>
+                        <input className = "form-control" type = "email" id = "input-3" placeholder = "Enter Email" value = {email} onChange = {(e) => setEmail(e.target.value)}/><br/>
                         <label htmlFor = "input-4">Password</label><br/>
-                        <input className = "input" type = "password" id = "input-4" placeholder = "Password" value = {password} onChange = {(e) => setPassword(e.target.value)}/><br/><br/>
+                        <input className = "form-control" type = "password" id = "input-4" placeholder = "Password" value = {password} onChange = {(e) => setPassword(e.target.value)}/><br/>
                     </div>
                     <input className = "submit-input" type = "submit" />
             </form>

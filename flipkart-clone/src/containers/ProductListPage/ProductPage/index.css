@@ -1,0 +1,23 @@
+.product-container{ 
+    display:flex;
+    justify-content:center; 
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.product-sub-container{ 
+    height:300px;
+    width:300px; 
+    border:1px solid black;
+    display:flex;
+    flex-direction:column;
+    justify-content:center; 
+    align-items:center;
+    margin:10px;
+    
+}
+
+.image-page{ 
+    height:200px;
+    width:200px;
+}

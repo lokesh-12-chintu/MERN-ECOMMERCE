@@ -1,13 +1,13 @@
-import React from "react" 
-import {Route,Navigate} from 'react-router-dom';
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
 
-const PrivateRoute = ({element:Element, ...rest}) =>{
-    return <Route {...rest} element = {(props) => {
-        const token = window.localStorage.getItem('token')
+const PrivateRoute = ({component: Component, ...rest}) => {
+    return <Route {...rest} component={(props) => {
+        const token = window.localStorage.getItem('token');
         if(token){
-            return <Element {...props}/>
+            return <Component {...props} />
         }else{
-            return <Navigate to = {'/signin'}/>
+            return <Redirect to={`/signin`} />
         }
     }} />
 }

@@ -14,6 +14,7 @@ export const login = (user) => {
             const {token,user} = res.data;
             localStorage.setItem('token',token);
             localStorage.setItem('user',JSON.stringify(user))
+            console.log( localStorage.getItem('token'))
             dispatch({
                 type:authConstants.LOGIN_SUCCESS,
                 payload:{
